@@ -35,7 +35,8 @@
 	<bean id="jaxb2Marshaller"
 		class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
 
-		<property name="schema" value="classpath:/VoterInformation.xsd"/>
+		<property name="schema"
+			value="classpath:/VoterInformation.xsd" />
 		<property name="packagesToScan">
 			<list>
 				<value>com.voter.verification.model</value>
@@ -43,8 +44,21 @@
 		</property>
 
 	</bean>
-	
-	<mongo:template/>
+
+	<bean id="mongo"
+		class="org.springframework.data.mongodb.core.MongoFactoryBean">
+		<property name="host" value="localhost" />
+		<property name="port" value="27017" />
+	</bean>
+	<!-- MongoTemplate for connecting and quering the documents in the database -->
+	<bean id="mongoTemplate"
+		class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongo" ref="mongo" />
+		<constructor-arg name="databaseName" value="admin" />
+	</bean>
+	<mongo:repositories
+		base-package="com.vitalflux.mongo.repositories" />
+
 
 	<int:gateway id="gateway.id"
 		service-interface="com.voter.verification.gateway.VoterInformationGateway"
@@ -64,12 +78,11 @@
 		output-channel="person.mapper.voting.in" ref="voterServiceActivator"
 		method="mapPersonToVoter" />
 		
+	<int-mongodb:outbound-gateway mongo-template="mongoTemplate" request-channel="person.mapper.voting.in" reply-channel="db.reply.channel" collection-name=""/>
 		
-	
-
-
-	<int:chain input-channel="person.mapper.voting.in"
+	<int:chain input-channel="db.reply.channel"
 		output-channel="replyChannel">
+		
 		<int-xml:marshalling-transformer
 			id="obj-to-xml-transformer" marshaller="jaxb2Marshaller" />
 		<int:service-activator
