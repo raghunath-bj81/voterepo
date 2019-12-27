@@ -24,13 +24,11 @@
 	<int:channel id="replyChannel" />
 	<int:channel id="person.mapper.voting.out" />
 	<int:channel id="person.mapper.voting.in" />
-	
 
-
+<!-- Bean declarations starts -->
 	<bean id="jmsConnectionFactory"
 		class="org.apache.activemq.ActiveMQConnectionFactory"
 		p:brokerURL="tcp://localhost:61616" p:trustAllPackages="true" />
-
 
 	<bean id="jaxb2Marshaller"
 		class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
@@ -42,11 +40,9 @@
 				<value>com.voter.verification.model</value>
 			</list>
 		</property>
-
 	</bean>
-
-	
-
+<!-- Bean declarations ends -->
+<!-- Gateway declarations starts -->
 	<int:gateway id="gateway.id"
 		service-interface="com.voter.verification.gateway.VoterInformationGateway"
 		default-request-channel="requestChannel"

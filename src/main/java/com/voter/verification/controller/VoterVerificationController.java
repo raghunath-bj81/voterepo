@@ -44,11 +44,11 @@ public class VoterVerificationController {
 		
 		MessageHeaders header = new MessageHeaders(headers);
 		Message<String> msg = MessageBuilder.createMessage(personString, header);
-		Message<VotersStatus> voters = voterInputGateway.sendToInputQ(msg);
+		Message<String> voterXMLConverted = voterInputGateway.sendToInputQ(msg);
 		
-		if(null != voters) {
-			System.out.println("Voters statistics -> "+voters.toString());
+		if(null != voterXMLConverted) {
+			System.out.println("Voters statistics -> "+voterXMLConverted.getPayload());
 		}
-		return new ResponseEntity<String>("Published the message message", HttpStatus.ACCEPTED);
+		return new ResponseEntity<String>(voterXMLConverted.getPayload(), HttpStatus.ACCEPTED);
 	}
 }
