@@ -3,29 +3,29 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:jms="http://www.springframework.org/schema/integration/jms"
 	xmlns:integration="http://www.springframework.org/schema/integration"
+	xmlns:int-mongodb="http://www.springframework.org/schema/integration/mongodb"
 	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-jdbc="http://www.springframework.org/schema/integration/jdbc"
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-	xmlns:int-mongodb="http://www.springframework.org/schema/integration/mongodb"
-	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
 	xmlns:int-xml="http://www.springframework.org/schema/integration/xml"
 	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-								 http://www.springframework.org/schema/data/mongo https://www.springframework.org/schema/data/mongo/spring-mongo.xsd
                                  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
                                  http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.2.xsd
                                  http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd
                                  http://www.springframework.org/schema/integration/mail http://www.springframework.org/schema/integration/mail/spring-integration-mail-4.2.xsd
                                  http://www.springframework.org/schema/integration/xml http://www.springframework.org/schema/integration/xml/spring-integration-xml-4.2.xsd
-                                 http://www.springframework.org/schema/integration/mongodb http://www.springframework.org/schema/integration/mongodb/spring-integration-mongodb.xsd
                                  http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms.xsd
                                  http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+                                 http://www.springframework.org/schema/integration/mongodb  https://www.springframework.org/schema/integration/mongodb/spring-integration-mongodb.xsd 
                                  http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream-4.2.xsd">
 
 	<int:channel id="requestChannel" />
 	<int:channel id="replyChannel" />
 	<int:channel id="person.mapper.voting.out" />
 	<int:channel id="person.mapper.voting.in" />
+	
+
 
 	<bean id="jmsConnectionFactory"
 		class="org.apache.activemq.ActiveMQConnectionFactory"
@@ -45,20 +45,7 @@
 
 	</bean>
 
-	<bean id="mongo"
-		class="org.springframework.data.mongodb.core.MongoFactoryBean">
-		<property name="host" value="localhost" />
-		<property name="port" value="27017" />
-	</bean>
-	<!-- MongoTemplate for connecting and quering the documents in the database -->
-	<bean id="mongoTemplate"
-		class="org.springframework.data.mongodb.core.MongoTemplate">
-		<constructor-arg name="mongo" ref="mongo" />
-		<constructor-arg name="databaseName" value="admin" />
-	</bean>
-	<mongo:repositories
-		base-package="com.vitalflux.mongo.repositories" />
-
+	
 
 	<int:gateway id="gateway.id"
 		service-interface="com.voter.verification.gateway.VoterInformationGateway"
@@ -78,9 +65,8 @@
 		output-channel="person.mapper.voting.in" ref="voterServiceActivator"
 		method="mapPersonToVoter" />
 		
-	<int-mongodb:outbound-gateway mongo-template="mongoTemplate" request-channel="person.mapper.voting.in" reply-channel="db.reply.channel" collection-name=""/>
 		
-	<int:chain input-channel="db.reply.channel"
+	<int:chain input-channel="person.mapper.voting.in"
 		output-channel="replyChannel">
 		
 		<int-xml:marshalling-transformer
