@@ -22,6 +22,7 @@
 
 	<int:channel id="requestChannel" />
 	<int:channel id="replyChannel" />
+	<int:channel id="replyChannel.2" />
 	<int:channel id="person.mapper.voting.out" />
 	<int:channel id="person.mapper.voting.in" />
 
@@ -41,6 +42,9 @@
 			</list>
 		</property>
 	</bean>
+	
+	<bean id = "destRouter" class="com.voter.verification.service.DummyActivator"/>
+	
 <!-- Bean declarations ends -->
 <!-- Gateway declarations starts -->
 	<int:gateway id="gateway.id"
@@ -60,8 +64,7 @@
 		input-channel="person.mapper.voting.out"
 		output-channel="person.mapper.voting.in" ref="voterServiceActivator"
 		method="mapPersonToVoter" />
-		
-		
+	
 	<int:chain input-channel="person.mapper.voting.in"
 		output-channel="replyChannel">
 		
@@ -70,8 +73,10 @@
 		<int:service-activator
 			id="service.activator.input.id.2" ref="voterServiceActivator"
 			method="voterXMLInput" />
-
+		<jms:message-driven-channel-adapter id="XMLOutput.id" destination="voterOutputQueue" connection-factory="jmsConnectionFactory"/>
+			
 	</int:chain>
-
+	
+		
 	<!-- Bean definitions to be used for the integrations -->
 </beans>

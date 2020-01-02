@@ -1,12 +1,9 @@
 package com.voter.verification.service;
 
-import java.io.File;
 import java.io.StringWriter;
 
-import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
@@ -61,7 +58,7 @@ public class VoterServiceActivator {
 	 * @param inputJson
 	 * @return
 	 */
-	public Message<String> voterXMLInput(Message<DOMResult> inputJson) {
+	public String voterXMLInput(Message<DOMResult> inputJson) {
 		DOMResult payload = inputJson.getPayload();
 		Transformer transformer;
 		Message<String> msgOutput = null;
@@ -75,6 +72,7 @@ public class VoterServiceActivator {
 		} catch (TransformerFactoryConfigurationError | TransformerException e) {
 			e.printStackTrace();
 		}
-		return msgOutput;
+		return msgOutput.getPayload();
 	}
+	
 }
