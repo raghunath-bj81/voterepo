@@ -22,7 +22,6 @@
 
 	<int:channel id="requestChannel" />
 	<int:channel id="replyChannel" />
-	<int:channel id="replyChannel.2" />
 	<int:channel id="person.mapper.voting.out" />
 	<int:channel id="person.mapper.voting.in" />
 
@@ -73,9 +72,10 @@
 		<int:service-activator
 			id="service.activator.input.id.2" ref="voterServiceActivator"
 			method="voterXMLInput" />
-		<jms:message-driven-channel-adapter id="XMLOutput.id" destination="voterOutputQueue" connection-factory="jmsConnectionFactory"/>
-			
+		
 	</int:chain>
+	
+	<jms:outbound-channel-adapter id="xmlQueue.id" channel="replyChannel" connection-factory="jmsConnectionFactory" destination="voterOutputQueue"/>
 	
 		
 	<!-- Bean definitions to be used for the integrations -->
