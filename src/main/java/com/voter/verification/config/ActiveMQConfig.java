@@ -18,6 +18,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ActiveMQConfig {
 
 	private final String VOTER_VEIFN_INPUT_QUEUE_NAME = "VoterJsonInputQueue";
+	
+	private final String VOTER_VEIFN_JSON_OUTPUT_QUEUE_NAME = "VoterJsonOutputQueue";
 
 	private final String VOTER_VEIFN_OUTPUT_QUEUE_NAME = "VoterXMLOutputQueue";
 
@@ -29,6 +31,15 @@ public class ActiveMQConfig {
 	@Bean
 	public Queue voterInputQueue() {
 		return new ActiveMQQueue(VOTER_VEIFN_INPUT_QUEUE_NAME);
+	}
+	
+	/**
+	 * Voter Input Queue to read the messages
+	 * @return
+	 */
+	@Bean
+	public Queue voterJsonOutputQueue() {
+		return new ActiveMQQueue(VOTER_VEIFN_JSON_OUTPUT_QUEUE_NAME);
 	}
 
 	/**

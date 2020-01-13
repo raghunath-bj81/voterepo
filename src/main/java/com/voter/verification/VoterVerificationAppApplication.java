@@ -7,7 +7,7 @@ import org.springframework.integration.config.EnableIntegration;
 
 @SpringBootApplication
 @EnableIntegration
-@ImportResource("classpath*:/voter-app-configuration.xml")
+@ImportResource({"classpath*:/voter-app-configuration.xml"})
 public class VoterVerificationAppApplication {
 
 	public static void main(String[] args) {

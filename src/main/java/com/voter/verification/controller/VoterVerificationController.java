@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.voter.verification.gateway.VoterInformationGateway;
-import com.voter.verification.model.VotersStatus;
 
 /**
  * Handler class to handle the person object to prepare the voter information
@@ -36,7 +35,7 @@ public class VoterVerificationController {
 	 * to verify whether the employee is eligible for voting or not.
 	 * @return
 	 */
-	@RequestMapping(value = "/sendMsg", method = RequestMethod.POST, produces = {"application/json"})
+	@RequestMapping(value = "/sendVoterInfo", method = RequestMethod.POST, produces = {"application/xml"})
 	public ResponseEntity<?> publishVoterInfo(@RequestBody String personString) {
 		
 		Map<String, Object> headers = new HashMap<>();
@@ -44,11 +43,9 @@ public class VoterVerificationController {
 		
 		MessageHeaders header = new MessageHeaders(headers);
 		Message<String> msg = MessageBuilder.createMessage(personString, header);
-		Message<VotersStatus> voters = voterInputGateway.sendToInputQ(msg);
+		voterInputGateway.sendToInputQ(msg);
 		
-		if(null != voters) {
-			System.out.println("Voters statistics -> "+voters.toString());
-		}
-		return new ResponseEntity<String>("Published the message message", HttpStatus.ACCEPTED);
+		
+		return new ResponseEntity<String>("Published successfully", HttpStatus.ACCEPTED);
 	}
 }
