@@ -43,11 +43,9 @@ public class VoterVerificationController {
 		
 		MessageHeaders header = new MessageHeaders(headers);
 		Message<String> msg = MessageBuilder.createMessage(personString, header);
-		Message<String> voterXMLConverted = voterInputGateway.sendToInputQ(msg);
+		voterInputGateway.sendToInputQ(msg);
 		
-		if(null != voterXMLConverted) {
-			System.out.println("Voter Converted XML -> "+voterXMLConverted.getPayload());
-		}
-		return new ResponseEntity<String>(voterXMLConverted.getPayload(), HttpStatus.ACCEPTED);
+		
+		return new ResponseEntity<String>("Published successfully", HttpStatus.ACCEPTED);
 	}
 }
