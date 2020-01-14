@@ -11,11 +11,13 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
-import com.voter.verification.model.PersonInformation;
+import com.voter.verification.dao.VoterDAO;
+import com.voter.verification.model.Voter;
 import com.voter.verification.model.VoterInformation;
 
 /**
@@ -27,6 +29,9 @@ import com.voter.verification.model.VoterInformation;
  */
 @Component
 public class VoterServiceActivator {
+	
+	@Autowired
+	private VoterDAO voterDAO;
 
 	/**
 	 * Service activator method to receive the input message
@@ -34,19 +39,23 @@ public class VoterServiceActivator {
 	 * @param inputMesg
 	 * @return
 	 */
-	public Message<VoterInformation> mapPersonToVoter(Message<PersonInformation> personMsg) {
+	public Message<VoterInformation> mapPersonToVoter(Message<Voter> personMsg) {
 		System.out.println("Inside service activator... " + personMsg.getPayload());
-		PersonInformation personInfo = personMsg.getPayload();
-
+		Voter voterInput = personMsg.getPayload();
+		Voter voterObjSaved = null;
 		boolean isPersonEligible = false;
-		if (personInfo.getpersonAge() >= 18) {
+		if (voterInput.getpersonAge() >= 18) {
 			isPersonEligible = true;
 		}
+		/** Saving the information using DAO Layer*/
+		voterObjSaved = voterDAO.saveOrUpdateVoterInfo(voterInput);
+		System.out.println("Voter information has been successfully saved or updated!...."+voterObjSaved.toString());
+		
 		VoterInformation voterInfo = new VoterInformation();
-		voterInfo.setVoterId(personInfo.getpersonId());
-		voterInfo.setVoterName(personInfo.getpersonName());
-		voterInfo.setVoterAddress(personInfo.getpersonAddress());
-		voterInfo.setVoterProvince(personInfo.getState());
+		voterInfo.setVoterId(voterInput.getpersonId());
+		voterInfo.setVoterName(voterInput.getpersonName());
+		voterInfo.setVoterAddress(voterInput.getpersonAddress());
+		voterInfo.setVoterProvince(voterInput.getState());
 		voterInfo.setEligible(isPersonEligible);
 
 		return MessageBuilder.withPayload(voterInfo).build();
