@@ -34,6 +34,12 @@ public class VoterInformation implements Serializable {
 	@XmlElement(name="voterage")
 	private int voterAge;
 	
+	@XmlElement(name="referenceId")
+	private String referenceId;
+	
+	@XmlElement(name="emailId")
+	private String emailId;
+	
 	public void setVoterId(int voterId) {
 		this.voterId = voterId;
 	}
@@ -55,7 +61,18 @@ public class VoterInformation implements Serializable {
 	public void setVoterAge(int voterAge) {
 		this.voterAge = voterAge;
 	}
-	
+	public String getReferenceId() {
+		return referenceId;
+	}
+	public void setReferenceId(String referenceId) {
+		this.referenceId = referenceId;
+	}
+	public String getEmailId() {
+		return emailId;
+	}
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
 //	
 //	public int getVoterId() {
 //		return voterId;
