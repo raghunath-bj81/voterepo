@@ -57,6 +57,7 @@ public class VoterServiceActivator {
 		voterInfo.setVoterAddress(voterInput.getpersonAddress());
 		voterInfo.setVoterProvince(voterInput.getState());
 		voterInfo.setEligible(isPersonEligible);
+		voterInfo.setVoterAge(voterInput.getpersonAge());
 
 		return MessageBuilder.withPayload(voterInfo).build();
 	}

@@ -31,6 +31,9 @@ public class VoterInformation implements Serializable {
 	@XmlElement(name="isEligible")
 	private boolean isEligible;
 	
+	@XmlElement(name="voterage")
+	private int voterAge;
+	
 	public void setVoterId(int voterId) {
 		this.voterId = voterId;
 	}
@@ -45,6 +48,12 @@ public class VoterInformation implements Serializable {
 	}
 	public void setEligible(boolean isEligible) {
 		this.isEligible = isEligible;
+	}
+	public int getVoterAge() {
+		return voterAge;
+	}
+	public void setVoterAge(int voterAge) {
+		this.voterAge = voterAge;
 	}
 	
 //	
