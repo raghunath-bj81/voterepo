@@ -57,7 +57,7 @@
 	<int:json-to-object-transformer
 		id="jsonStringToPersonTrnsfrmer.eligible.person.id"
 		object-mapper="getMapper"
-		type="com.voter.verification.model.PersonInformation"
+		type="com.voter.verification.model.Voter"
 		input-channel="requestChannel"
 		output-channel="person.mapper.voting.out" />
 

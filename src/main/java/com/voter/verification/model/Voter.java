@@ -2,7 +2,10 @@ package com.voter.verification.model;
 
 import java.io.Serializable;
 
-public class PersonInformation implements Serializable {
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "voterinformation")
+public class Voter implements Serializable {
 
 	/**
 	 * 
@@ -44,7 +47,7 @@ public class PersonInformation implements Serializable {
 	public void setState(String state) {
 		this.state = state;
 	}
-	public PersonInformation(int personId, String personName, int personAge, String personAddress,
+	public Voter(int personId, String personName, int personAge, String personAddress,
 			String state) {
 		super();
 		this.personId = personId;
@@ -54,12 +57,12 @@ public class PersonInformation implements Serializable {
 		this.state = state;
 	}
 	
-	public PersonInformation() {
+	public Voter() {
 	}
 	
 	@Override
 	public String toString() {
-		return "PersonInformation [personId=" + personId + ", personName=" + personName + ", personAge="
+		return "Voter [personId=" + personId + ", personName=" + personName + ", personAge="
 				+ personAge + ", personAddress=" + personAddress + ", state=" + state + "]";
 	}
 }
